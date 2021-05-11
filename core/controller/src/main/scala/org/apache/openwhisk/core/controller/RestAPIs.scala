@@ -152,7 +152,8 @@ protected[controller] object RestApiCommons {
  * Useful for CORS.
  */
 protected[controller] trait RespondWithHeaders extends Directives with CorsSettings.RestAPIs {
-  val sendCorsHeaders = respondWithHeaders(allowOrigin, allowHeaders, allowMethods)
+  // val sendCorsHeaders = respondWithHeaders(allowOrigin, allowHeaders, allowMethods)
+  val sendCorsHeaders = respondWithHeaders(allowHeaders, allowMethods)
 }
 
 case class WhiskInformation(buildNo: String, date: String)
