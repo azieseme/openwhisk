@@ -153,6 +153,7 @@ protected[controller] object RestApiCommons {
  */
 protected[controller] trait RespondWithHeaders extends Directives with CorsSettings.RestAPIs {
   //val sendCorsHeaders = respondWithHeaders(allowOrigin, allowHeaders, allowMethods)
+  import akka.http.scaladsl.model.headers.RawHeader
   val sendMyHeaders = respondWithHeaders(
                             RawHeader("X-Content-Type-Options", "nosniff"),
                             RawHeader("X-XSS-Protection", "1; mode=block"),
