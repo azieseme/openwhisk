@@ -152,7 +152,13 @@ protected[controller] object RestApiCommons {
  * Useful for CORS.
  */
 protected[controller] trait RespondWithHeaders extends Directives with CorsSettings.RestAPIs {
-  val sendCorsHeaders = respondWithHeaders(allowOrigin, allowHeaders, allowMethods)
+  //val sendCorsHeaders = respondWithHeaders(allowOrigin, allowHeaders, allowMethods)
+  val sendMyHeaders = respondWithHeaders(
+                            RawHeader("X-Content-Type-Options", "nosniff"),
+                            RawHeader("X-XSS-Protection", "1; mode=block"),
+                            RawHeader("Cache-Control", "no-store, max-age=0"),
+                            RawHeader("Pragma", "no-cache"),
+                            allowOrigin, allowHeaders, allowMethods)
 }
 
 case class WhiskInformation(buildNo: String, date: String)
@@ -197,7 +203,8 @@ class RestAPIVersion(config: WhiskConfig, apiPath: String, apiVersion: String)(
 
   def routes(implicit transid: TransactionId): Route = {
     prefix {
-      sendCorsHeaders {
+      // sendCorsHeaders {
+      sendMyHeaders {
         info ~
           authenticationDirectiveProvider.authenticate(transid, authStore, logging) { user =>
             namespaces.routes(user) ~
@@ -219,7 +226,8 @@ class RestAPIVersion(config: WhiskConfig, apiPath: String, apiVersion: String)(
           web.routes()
         } ~
           options {
-            sendCorsHeaders {
+            // sendCorsHeaders {
+            sendMyHeaders {
               complete(OK)
             }
           }
