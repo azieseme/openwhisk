@@ -64,22 +64,22 @@ class RespondWithHeadersTests extends ControllerTestCommon with RespondWithHeade
 
   it should "respond to options" in {
     Options("/api/v1") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain allOf (allowOrigin, allowHeaders, "X-Content-Type-Options: nosniff","X-XSS-Protection: 1; mode=block","Cache-Control: no-store, max-age=0","Pragma: no-cache")
     }
   }
 
   it should "respond to options on every route under /api/v1" in {
     Options("/api/v1/one") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain allOf (allowOrigin, allowHeaders, "X-Content-Type-Options: nosniff","X-XSS-Protection: 1; mode=block","Cache-Control: no-store, max-age=0","Pragma: no-cache")
     }
     Options("/api/v1/two") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain allOf (allowOrigin, allowHeaders, "X-Content-Type-Options: nosniff","X-XSS-Protection: 1; mode=block","Cache-Control: no-store, max-age=0","Pragma: no-cache")
     }
   }
 
   it should "respond to options even on bogus routes under /api/v1" in {
     Options("/api/v1/bogus") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain allOf (allowOrigin, allowHeaders, "X-Content-Type-Options: nosniff","X-XSS-Protection: 1; mode=block","Cache-Control: no-store, max-age=0","Pragma: no-cache")
     }
   }
 
