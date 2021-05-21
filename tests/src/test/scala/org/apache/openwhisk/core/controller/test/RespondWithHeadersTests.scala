@@ -63,22 +63,26 @@ class RespondWithHeadersTests extends ControllerTestCommon with RespondWithHeade
 
   it should "respond to options" in {
     Options("/api/v1") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain (allowHeaders)
+      headers should not contain (allowOrigin)
     }
   }
 
   it should "respond to options on every route under /api/v1" in {
     Options("/api/v1/one") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain (allowHeaders)
+      headers should not contain (allowOrigin)
     }
     Options("/api/v1/two") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain (allowHeaders)
+      headers should not contain (allowOrigin)
     }
   }
 
   it should "respond to options even on bogus routes under /api/v1" in {
     Options("/api/v1/bogus") ~> Route.seal(routes) ~> check {
-      headers should contain allOf (allowOrigin, allowHeaders)
+      headers should contain (allowHeaders)
+      headers should not contain (allowOrigin)
     }
   }
 

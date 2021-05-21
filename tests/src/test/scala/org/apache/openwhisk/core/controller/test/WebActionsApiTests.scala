@@ -1063,6 +1063,30 @@ trait WebActionsApiBaseTests extends ControllerTestCommon with BeforeAndAfterEac
       }
     }
 
+    it should s"handle http web action with JSON object as string response and validate CORS headers present (auth? ${creds.isDefined})" in {
+      implicit val tid = transid()
+
+      Seq(s"$systemId/proxy/export_c.http").foreach { path =>
+        Seq(OK, Created).foreach { statusCode =>
+          allowedMethods.foreach { m =>
+            invocationsAllowed += 1
+            actionResult = Some(
+              JsObject(
+                "headers" -> JsObject("content-type" -> "application/json".toJson),
+                webApiDirectives.statusCode -> statusCode.intValue.toJson,
+                "body" -> JsObject("field" -> "value".toJson).compactPrint.toJson))
+
+            m(s"$testRoutePath/$path") ~> Route.seal(routes(creds)) ~> check {
+              status should be(statusCode)
+              headers should contain allOf (allowOrigin, allowHeaders)
+              mediaType shouldBe MediaTypes.`application/json`
+              responseAs[JsObject] shouldBe JsObject("field" -> "value".toJson)
+            }
+          }
+        }
+      }
+    }
+
     it should s"handle http web action with partially specified result (auth? ${creds.isDefined})" in {
       implicit val tid = transid()
 
