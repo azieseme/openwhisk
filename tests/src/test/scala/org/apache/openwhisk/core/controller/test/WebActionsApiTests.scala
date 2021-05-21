@@ -1063,7 +1063,7 @@ trait WebActionsApiBaseTests extends ControllerTestCommon with BeforeAndAfterEac
       }
     }
 
-        it should s"handle http web action with JSON object as string response (auth? ${creds.isDefined})" in {
+        it should s"handle http web action with JSON object as string response and validate CORS headers present (auth? ${creds.isDefined})" in {
           implicit val tid = transid()
 
           Seq(s"$systemId/proxy/export_c.http").foreach { path =>
