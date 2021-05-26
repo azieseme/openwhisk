@@ -96,7 +96,7 @@ class HeadersTests extends FlatSpec with Matchers with ScalaFutures with WskActo
    */
   def containsHeaders(headers: Seq[HttpHeader], allowedMethods: Option[Set[String]] = None) = {
     // headers should contain allOf (allowOrigin, allowHeaders)
-    headers should contain allOf (allowHeaders)
+    headers should contain (allowHeaders)
 
     // TODO: commented out for now as allowed methods are not supported currently
     //        val headersMap = headers map { header =>
@@ -110,7 +110,7 @@ class HeadersTests extends FlatSpec with Matchers with ScalaFutures with WskActo
 
   it should "respond to OPTIONS with all headers" in {
     // request(OPTIONS, url.withPath(basePath)).futureValue.headers should contain allOf (allowOrigin, allowHeaders)
-    request(OPTIONS, url.withPath(basePath)).futureValue.headers should contain allOf (allowHeaders)
+    request(OPTIONS, url.withPath(basePath)).futureValue.headers should contain (allowHeaders)
   }
 
   ignore should "not respond to OPTIONS for non existing path" in {
